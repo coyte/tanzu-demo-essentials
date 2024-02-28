@@ -14,13 +14,13 @@ tanzu secret registry add tap-registry \
   --server ${MY_REGISTRY} \
   --export-to-all-namespaces --yes --namespace tap-install
 
-# Create repository
+echo "Create repository"
 tanzu package repository add tanzu-tap-repository \
   --url ${MY_REGISTRY}/${MY_REGISTRY_INSTALL_REPO}/tap-packages:$TAP_VERSION \
   --namespace tap-install
 
-# Check repository
+echo "Check repository"
 tanzu package repository get tanzu-tap-repository --namespace tap-install
 
-# List available packes
+echo "List available packes"
 tanzu package available list --namespace tap-install

@@ -5,6 +5,9 @@
 # You can skip this step if you're deploying TAP directly from the Tanzu Network registry.
 # In that case run script 05b-add-repo-to-cluster.sh after this script and skip 05-add-repo-to-cluster.sh.
 #
+
+#NT project (tap-install) needs to exist in harbor, or imgpkg errors out
+
 echo "Login in to registry '$MY_REGISTRY'"
 docker login $MY_REGISTRY --username $MY_REGISTRY_USER --password $MY_REGISTRY_PASSWORD
 echo "Login in to registry 'registry.tanzu.vmware.com'"

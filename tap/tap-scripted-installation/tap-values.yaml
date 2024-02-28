@@ -7,10 +7,10 @@ profile: full
 ceip_policy_disclosed: true
 
 shared:
-  ingress_domain: tap.viktoriouslab.nl
-  ingress_issuer: <your-cluster-issuer>
-  image_registry:
-    project_path: <registry to store artifacts>
+  ingress_domain: nilab.io
+  ingress_issuer: ""
+  image_registry: 
+    project_path: harbor.nilab.io/tap/build-service
     secret:
       name: tap-registry
       namespace: tap-install
@@ -26,14 +26,14 @@ metadata_store:
 #############################################################################################
 # Use a git repository for K8S yaml distribution (using GitOps instead of RegistryOps)      #
 #############################################################################################
-ootb_supply_chain_testing_scanning:
-  gitops:
-    ssh_secret: git-https-secret
-    branch: main
-    commit_message: "Update from TAP Supply Chain Choreographer"
-    server_address: https://github.com/
-    repository_owner: viktoriousss  # github-account
-    repository_name: tap-deliveries # github-repository
+#ootb_supply_chain_testing_scanning:
+#  gitops:
+#    ssh_secret: git-https-secret
+#    branch: main
+#    commit_message: "Update from TAP Supply Chain Choreographer"
+#    server_address: https://github.com/
+#    repository_owner: viktoriousss  # github-account
+#    repository_name: tap-deliveries # github-repository
 
 #############################################################################################
 # The namespace provisioner is responsible for setting up developer namespaces in your      #
@@ -41,43 +41,45 @@ ootb_supply_chain_testing_scanning:
 # namespaces to be created ws well as the default resources that should be added to these   #
 # namespaces.                                                                               #
 #############################################################################################
-namespace_provisioner:
-  controller: false
-  sync_period: 30s
+#namespace_provisioner:
+#  controller: false
+#  sync_period: 30s
   # Namespace provisioner - list of namespaces
-  gitops_install:
-    ref: origin/main
-    subPath: tap/ns-provisioner/namespaces
-    url: https://github.com/viktoriousss/tanzu-demo-essentials.git
+#  gitops_install:
+#    ref: origin/main
+#    subPath: tap/ns-provisioner/namespaces
+#    url: https://github.com/viktoriousss/tanzu-demo-essentials.git
   # Namespace provisioner - additional resources
-  additional_sources:
-    - git:
-        url: https://github.com/viktoriousss/tanzu-demo-essentials.git  
-        ref: origin/main
-        subPath: tap/ns-provisioner/namespaces-resources        
-        secretRef:
-          name: git-https-secret # this is the new credential
-          namespace: tap-install
+#  additional_sources:
+#    - git:
+#        url: https://github.com/viktoriousss/tanzu-demo-essentials.git  
+#        ref: origin/main
+#        subPath: tap/ns-provisioner/namespaces-resources        
+#        secretRef:
+#          name: git-https-secret # this is the new credential
+ #         namespace: tap-install
           #create_export: true
   #import_data_values_secrets:
   #  - name: git-https-secret
   #    namespace: tap-install
   #    create_export: true
   # This account is used for doing GitOps with Supply Chain Choreographer
-  default_parameters:
-    supply_chain_service_account:
-      secrets:
-      - git-https-secret
+#  default_parameters:
+#    supply_chain_service_account:
+#      secrets:
+#      - git-https-secret
 
 #############################################################################################
 # Local source proxy configuration - this is used by Tanzu Developer Portal to upload       #
 # local sourcecode to this repository.                                                      #
 #                                                                                           #
 # Secrets (lsp-push-credentials & lsp-pull-credentials) should be exported, either through  #
-# create_export: true or a secret export YAML. See ./secrets/lsp-secrets.example.yaml       #
+# create_export: true or a secret export YAML. See ./secrets/lsp-secrets.example.yaml 
+# Create the .dockerconfigjson: string by doing a docker login on linux and base64 encondig #
+# the reulting ~/.docker/config.json (use -w0 to avoid linesplit)
 #############################################################################################
 local_source_proxy:
-  repository: "harbor.viktoriouslab.nl/local-tap/vscode-tmp"
+  repository: "harbor.nilab.io/local-tap/vscode-tmp"
   push_secret:
     name: lsp-push-credentials
     namespace: tap-install
@@ -93,33 +95,35 @@ local_source_proxy:
 #############################################################################################
 tap_gui:
   # TLS certificate configuration for TAP-GUI
-  tls:
-    namespace: cert-manager
-    secretName: tap-gui
+#  tls:
+#    namespace: cert-manager
+#    secretName: tap-gui
   app_config:
+    app:
+      baseUrl: http://tap-gui.nilab.io
     customize:
       custom_name: "Nilab.io Developer Portal"
     organization:
       name: "nilab.io"
     # GitHub authentication configuration
     auth:
-      allowGuestAccess: false
+      allowGuestAccess: true
       environment: development
       providers:
         github: # This is for github OAuth authentication to the TAP portal. Configure a new OAuth app for TAP here: https://github.com/settings/developers. Homepage URL is http://tap-gui.<ingress-domain configured earlier>.
           development:
-            clientId: "<clientId>"  # you need to get this value from GitHub Developer Settings OAuth2 page
-            clientSecret: "<clientSecret>"
-    backend:
-      database:
-        client: pg
-        connection:
-          host: postgresql.postgres.svc.cluster.local
-          port: 5432
-          user: admin
-          password: VMware1!
-          #ssl: { rejectUnauthorized: false } # Set to true if using SSL
-          ssl: false
+            clientId: "105191c8f1d49c7f6915"  # you need to get this value from GitHub Developer Settings OAuth2 page
+            clientSecret: "4545f617e94688c602a19b1f950f25164ccec0a4"
+#    backend:
+#      database:
+#        client: pg
+#        connection:
+#          host: postgresql.postgres.svc.cluster.local
+#          port: 5432
+#          user: niels
+#          password: ${env:POSTGRES_USERPASSWORD}
+#          ssl: { rejectUnauthorized: false } # Set to true if using SSL
+#          ssl: false
 #
 #excluded_packages:
 #  - crossplane.tanzu.vmware.com
