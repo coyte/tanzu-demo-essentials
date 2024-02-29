@@ -41,28 +41,31 @@ metadata_store:
 # namespaces to be created ws well as the default resources that should be added to these   #
 # namespaces.                                                                               #
 #############################################################################################
-#namespace_provisioner:
-#  controller: false
-#  sync_period: 30s
+namespace_provisioner:
+  controller: false
+  sync_period: 30s
   # Namespace provisioner - list of namespaces
-#  gitops_install:
-#    ref: origin/main
-#    subPath: tap/ns-provisioner/namespaces
-#    url: https://github.com/viktoriousss/tanzu-demo-essentials.git
+  gitops_install:
+    ref: origin/main
+    subPath: tap/ns-provisioner/namespaces
+    url: https://github.com/coyte/tanzu-demo-essentials.git
+
   # Namespace provisioner - additional resources
-#  additional_sources:
-#    - git:
-#        url: https://github.com/viktoriousss/tanzu-demo-essentials.git  
-#        ref: origin/main
-#        subPath: tap/ns-provisioner/namespaces-resources        
+  additional_sources:
+    - git:
+        url: https://github.com/coyte/tanzu-demo-essentials.git  
+        ref: origin/main
+        subPath: tap/ns-provisioner/namespaces-resources        
 #        secretRef:
 #          name: git-https-secret # this is the new credential
  #         namespace: tap-install
           #create_export: true
+
   #import_data_values_secrets:
   #  - name: git-https-secret
   #    namespace: tap-install
   #    create_export: true
+  
   # This account is used for doing GitOps with Supply Chain Choreographer
 #  default_parameters:
 #    supply_chain_service_account:
@@ -75,6 +78,7 @@ metadata_store:
 #                                                                                           #
 # Secrets (lsp-push-credentials & lsp-pull-credentials) should be exported, either through  #
 # create_export: true or a secret export YAML. See ./secrets/lsp-secrets.example.yaml 
+# ********
 # Create the .dockerconfigjson: string by doing a docker login on linux and base64 encondig #
 # the reulting ~/.docker/config.json (use -w0 to avoid linesplit)
 #############################################################################################
@@ -107,23 +111,22 @@ tap_gui:
       name: "nilab.io"
     # GitHub authentication configuration
     auth:
-      allowGuestAccess: true
+      allowGuestAccess: false
       environment: development
       providers:
         github: # This is for github OAuth authentication to the TAP portal. Configure a new OAuth app for TAP here: https://github.com/settings/developers. Homepage URL is http://tap-gui.<ingress-domain configured earlier>.
           development:
-            clientId: "105191c8f1d49c7f6915"  # you need to get this value from GitHub Developer Settings OAuth2 page
-            clientSecret: "4545f617e94688c602a19b1f950f25164ccec0a4"
-#    backend:
-#      database:
-#        client: pg
-#        connection:
-#          host: postgresql.postgres.svc.cluster.local
-#          port: 5432
-#          user: niels
-#          password: ${env:POSTGRES_USERPASSWORD}
-#          ssl: { rejectUnauthorized: false } # Set to true if using SSL
-#          ssl: false
+            clientId: "9a8b2fc60cfdd904ce82"  # you need to get this value from GitHub Developer Settings OAuth2 page
+            clientSecret: "7070bf061ee03cbecb0492776e069aa5015ae0b1"
+    backend:
+      database:
+        client: pg
+        connection:
+          host: postgresql.tanzu-postgres.svc.cluster.local
+          port: 5432
+          user: tapgui
+          password: h3@EHen@F7w3
+          ssl: false
 #
 #excluded_packages:
 #  - crossplane.tanzu.vmware.com

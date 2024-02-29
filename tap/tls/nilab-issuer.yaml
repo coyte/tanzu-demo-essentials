@@ -1,0 +1,19 @@
+# Next we make the issuer that defines letsencrypt
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+  namespace: cert-manager
+spec:
+  acme:
+    email: niels@teekens.info
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - dns01:
+        cloudflare:
+          email: niels@teekens.info
+          apiTokenSecretRef:
+            name: cloudflare-api-token-secret
+            key: api-token  

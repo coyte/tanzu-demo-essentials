@@ -36,7 +36,7 @@ metadata:
   namespace: cert-manager
 spec:
   acme:
-    email: admin@nilab.io
+    email: niels@teekens.info
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod
@@ -56,7 +56,7 @@ metadata:
   name: nilab.io
   namespace: cert-manager
 spec:
-  secretName: test-domain-tls
+  secretName: tap-gui
   issuerRef:
     name: letsencrypt-prod
   duration: 2160h # 90d
