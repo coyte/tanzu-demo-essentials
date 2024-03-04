@@ -1,0 +1,47 @@
+#@ load("@ytt:data", "data")
+---
+#! Create a  secret with your Cloudflare API token
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloudflare-api-token-secret
+  namespace: cert-manager
+type: Opaque
+stringData:
+  api-token:  #@ data.values.cloudflare.token
+---
+#! Next we make the issuer that defines letsencrypt
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+  namespace: cert-manager
+spec:
+  acme:
+    email: #@ data.values.acme.email
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - dns01:
+        cloudflare:
+          email: #@ data.values.cloudflare.email
+          apiTokenSecretRef:
+            name: cloudflare-api-token-secret
+            key: api-token  
+---
+#! Enter the domain info
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nilab.io
+  namespace: cert-manager
+spec:
+  secretName: tap-gui
+  issuerRef:
+    name: letsencrypt-prod
+  duration: 2160h #! 90d
+  renewBefore: 720h #! 30d before SSL will expire, renew it
+  dnsNames:
+    - #@ data.values.dnsNames.dnsName1
+    - #@ data.values.dnsNames.dnsName2

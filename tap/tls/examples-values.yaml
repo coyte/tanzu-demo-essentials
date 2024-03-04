@@ -1,0 +1,13 @@
+#@data/values-schema
+---
+
+cloudflare:
+  token: <token from Cloudflare>
+  email: <Cloudflare login email>
+
+acme:
+  email: <email>
+
+dnsNames:
+  dnsName1: <subdomain tap.example.com>
+  dnsName2: <wildcard domain tap '*.tap.example.com'>

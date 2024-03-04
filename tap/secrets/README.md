@@ -1,6 +1,6 @@
-# TLS
+# Secrets
 
-This is where the tls for use with TAP are created.
+This is where the secrets for use with TAP are created.
 The ytt templating system is used to prevent editing multiple files and have credentials on github.
 A example-values.yaml is suplied for structure, copy the file and edit it to your liking.
 

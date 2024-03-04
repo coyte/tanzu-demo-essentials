@@ -58,11 +58,13 @@ namespace_provisioner:
         secretRef:
           name: git-https-secret # this is the new credential
           namespace: tap-install
-          #create_export: true
+          #create_export: true 
+  
   #import_data_values_secrets:
   #  - name: git-https-secret
   #    namespace: tap-install
   #    create_export: true
+  
   # This account is used for doing GitOps with Supply Chain Choreographer
   default_parameters:
     supply_chain_service_account:
