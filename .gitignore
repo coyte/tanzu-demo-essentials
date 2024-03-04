@@ -19,3 +19,6 @@
 tap/secrets/lsp-secrets.yaml
 tap/tap-scripted-installation/00-set-environment-variables-nilab.sh
 tap/tls/nilab-secret.yaml
+tap/secrets/nilab-values.yaml
+tap/secrets/nilab-secret.yaml
+tap/tls/nilab-values.yaml
